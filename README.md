@@ -68,7 +68,7 @@ exam-approval-system/
 
 1. 克隆项目
 ```bash
-git clone https://github.com/yourusername/exam-approval-system.git
+git clone https://github.com/HOAONI/exam-approval-system.git
 ```
 
 2. 安装依赖
