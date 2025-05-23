@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷审批管理系统 - 教师版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles-teacher.css">
+</head>
+<body>
+<div class="container">
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>试卷管理系统</h2>
+            <p>教师版</p>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </li>
+            <li class="nav-item" data-page="papers">
+                <i class="fas fa-file-alt"></i>
+                <span>试卷管理</span>
+            </li>
+            <li class="nav-item" data-page="students">
+                <i class="fas fa-users"></i>
+                <span>学生管理</span>
+            </li>
+            <li class="nav-item" data-page="profile">
+                <i class="fas fa-user-circle"></i>
+                <span>个人中心</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索...">
+            </div>
+            <div class="user-info">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="用户头像">
+                    <span>李教授</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 首页 -->
+            <div id="home" class="page active">
+
+                <div class="stats-cards">
+                    <div class="card">
+                        <div class="card-icon blue">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>试卷总数</h3>
+                            <p>28</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>已批阅</h3>
+                            <p>20</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>待批阅</h3>
+                            <p>8</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon red">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>学生人数</h3>
+                            <p>145</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-papers">
+                    <h2>最近上传的试卷</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>试卷名称</th>
+                                <th>上传者</th>
+                                <th>上传时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>大学物理期中考试</td>
+                                <td>张三</td>
+                                <td>2023-04-28 10:30</td>
+                                <td><span class="status pending">待批阅</span></td>
+                                <td>
+                                    <button class="action-btn">批阅</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>高等数学期末考试</td>
+                                <td>李四</td>
+                                <td>2023-04-27 14:15</td>
+                                <td><span class="status pending">待批阅</span></td>
+                                <td>
+                                    <button class="action-btn">批阅</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>计算机基础期中测验</td>
+                                <td>王五</td>
+                                <td>2023-04-26 09:45</td>
+                                <td><span class="status approved">已批阅</span></td>
+                                <td>
+                                    <button class="action-btn view">查看</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>大学英语四级模拟考试</td>
+                                <td>赵六</td>
+                                <td>2023-04-25 16:20</td>
+                                <td><span class="status approved">已批阅</span></td>
+                                <td>
+                                    <button class="action-btn view">查看</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 试卷管理 -->
+            <div id="papers" class="page">
+                <div class="page-header">
+                    <h1>试卷管理</h1>
+                    <button class="upload-btn" id="createPaperBtn">
+                        <i class="fas fa-plus"></i> 创建试卷
+                    </button>
+                </div>
+
+                <div class="papers-filter">
+                    <div class="filter-group">
+                        <label>状态:</label>
+                        <select>
+                            <option value="all">全部</option>
+                            <option value="approved">已批阅</option>
+                            <option value="pending">待批阅</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>学期:</label>
+                        <select>
+                            <option value="all">全部</option>
+                            <option value="2023-1">2023学年第一学期</option>
+                            <option value="2022-2">2022学年第二学期</option>
+                            <option value="2022-1">2022学年第一学期</option>
+                        </select>
+                    </div>
+                    <div class="search-paper">
+                        <input type="text" placeholder="搜索试卷...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="papers-list">
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>大学物理期中考试</h3>
+                            <div class="paper-meta">
+                                <span><i class="far fa-calendar-alt"></i> 2023-04-28</span>
+                                <span><i class="fas fa-user"></i> 已批阅学生: 15/45</span>
+                                <span><i class="fas fa-clock"></i> 考试时长: 120分钟</span>
+                            </div>
+                        </div>
+                        <span class="paper-status pending">进行中</span>
+                        <div class="paper-actions">
+                            <button><i class="fas fa-edit"></i> 编辑</button>
+                            <button><i class="fas fa-eye"></i> 查看批阅</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>高等数学期末考试</h3>
+                            <div class="paper-meta">
+                                <span><i class="far fa-calendar-alt"></i> 2023-04-27</span>
+                                <span><i class="fas fa-user"></i> 已批阅学生: 30/50</span>
+                                <span><i class="fas fa-clock"></i> 考试时长: 150分钟</span>
+                            </div>
+                        </div>
+                        <span class="paper-status pending">进行中</span>
+                        <div class="paper-actions">
+                            <button><i class="fas fa-edit"></i> 编辑</button>
+                            <button><i class="fas fa-eye"></i> 查看批阅</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>计算机基础期中测验</h3>
+                            <div class="paper-meta">
+                                <span><i class="far fa-calendar-alt"></i> 2023-04-26</span>
+                                <span><i class="fas fa-user"></i> 已批阅学生: 40/40</span>
+                                <span><i class="fas fa-clock"></i> 考试时长: 90分钟</span>
+                            </div>
+                        </div>
+                        <span class="paper-status approved">已完成</span>
+                        <div class="paper-actions">
+                            <button><i class="fas fa-chart-bar"></i> 查看统计</button>
+                            <button><i class="fas fa-download"></i> 导出成绩</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>大学英语四级模拟考试</h3>
+                            <div class="paper-meta">
+                                <span><i class="far fa-calendar-alt"></i> 2023-04-25</span>
+                                <span><i class="fas fa-user"></i> 已批阅学生: 35/35</span>
+                                <span><i class="fas fa-clock"></i> 考试时长: 120分钟</span>
+                            </div>
+                        </div>
+                        <span class="paper-status approved">已完成</span>
+                        <div class="paper-actions">
+                            <button><i class="fas fa-chart-bar"></i> 查看统计</button>
+                            <button><i class="fas fa-download"></i> 导出成绩</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学生管理 -->
+            <div id="students" class="page">
+                <div class="page-header">
+                    <h1>学生管理</h1>
+                    <button class="upload-btn" id="importStudentsBtn">
+                        <i class="fas fa-upload"></i> 导入学生
+                    </button>
+                </div>
+
+                <div class="papers-filter">
+                    <div class="filter-group">
+                        <label>班级:</label>
+                        <select>
+                            <option value="all">全部</option>
+                            <option value="class-1">计算机科学2021-1班</option>
+                            <option value="class-2">计算机科学2021-2班</option>
+                            <option value="class-3">计算机科学2022-1班</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>专业:</label>
+                        <select>
+                            <option value="all">全部</option>
+                            <option value="cs">计算机科学</option>
+                            <option value="se">软件工程</option>
+                            <option value="is">信息系统</option>
+                        </select>
+                    </div>
+                    <div class="search-paper">
+                        <input type="text" placeholder="搜索学生...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="students-table">
+                        <thead>
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>班级</th>
+                            <th>专业</th>
+                            <th>已提交试卷</th>
+                            <th>平均成绩</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2021001</td>
+                            <td>张三</td>
+                            <td>计算机科学2021-1班</td>
+                            <td>计算机科学</td>
+                            <td>8/10</td>
+                            <td>87.5</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021002</td>
+                            <td>李四</td>
+                            <td>计算机科学2021-1班</td>
+                            <td>计算机科学</td>
+                            <td>10/10</td>
+                            <td>92.0</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021003</td>
+                            <td>王五</td>
+                            <td>计算机科学2021-1班</td>
+                            <td>计算机科学</td>
+                            <td>7/10</td>
+                            <td>78.6</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021004</td>
+                            <td>赵六</td>
+                            <td>计算机科学2021-1班</td>
+                            <td>计算机科学</td>
+                            <td>9/10</td>
+                            <td>85.2</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021005</td>
+                            <td>钱七</td>
+                            <td>计算机科学2021-2班</td>
+                            <td>计算机科学</td>
+                            <td>6/10</td>
+                            <td>76.8</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021006</td>
+                            <td>孙八</td>
+                            <td>计算机科学2021-2班</td>
+                            <td>计算机科学</td>
+                            <td>10/10</td>
+                            <td>90.5</td>
+                            <td>
+                                <button class="action-btn small">查看</button>
+                                <button class="action-btn small edit">编辑</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination">
+                    <button><i class="fas fa-angle-double-left"></i></button>
+                    <button><i class="fas fa-angle-left"></i></button>
+                    <span class="page-info">第 1 页 / 共 5 页</span>
+                    <button><i class="fas fa-angle-right"></i></button>
+                    <button><i class="fas fa-angle-double-right"></i></button>
+                </div>
+            </div>
+
+            <!-- 个人中心 -->
+            <div id="profile" class="page">
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="用户头像">
+                            <button class="change-avatar-btn">更换头像</button>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">班级数量</span>
+                                <span class="stat-value">5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">学生总数</span>
+                                <span class="stat-value">145</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">试卷数量</span>
+                                <span class="stat-value">28</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">账号创建时间</span>
+                                <span class="stat-value">2021-09-01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-main">
+                        <div class="profile-section">
+                            <h2>个人资料</h2>
+                            <form class="profile-form">
+                                <div class="form-group">
+                                    <label>工号</label>
+                                    <input type="text" value="T20210001" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>姓名</label>
+                                    <input type="text" value="李教授">
+                                </div>
+                                <div class="form-group">
+                                    <label>职称</label>
+                                    <input type="text" value="副教授">
+                                </div>
+                                <div class="form-group">
+                                    <label>院系</label>
+                                    <input type="text" value="计算机科学与技术学院">
+                                </div>
+                                <div class="form-group">
+                                    <label>电子邮箱</label>
+                                    <input type="email" value="lijianshu@university.edu.cn">
+                                </div>
+                                <div class="form-group">
+                                    <label>联系电话</label>
+                                    <input type="tel" value="13800138000">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="save-btn">保存更改</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="profile-section">
+                            <h2>安全设置</h2>
+                            <div class="security-options">
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>修改密码</h3>
+                                        <p>定期修改密码可以保护您的账号安全</p>
+                                    </div>
+                                    <button class="change-btn" id="changePasswordBtn">修改</button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>登录记录</h3>
+                                        <p>查看您的账号登录历史记录</p>
+                                    </div>
+                                    <button class="view-btn">查看</button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>双因素认证</h3>
+                                        <p>启用双因素认证提高账号安全性</p>
+                                    </div>
+                                    <button class="change-btn">设置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 创建试卷模态框 -->
+<div id="createPaperModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>创建新试卷</h2>
+        <form id="createPaperForm">
+            <div class="form-group">
+                <label for="paper-title">试卷标题</label>
+                <input type="text" id="paper-title" placeholder="请输入试卷标题">
+            </div>
+            <div class="form-group">
+                <label for="paper-subject">科目</label>
+                <select id="paper-subject">
+                    <option value="">请选择科目</option>
+                    <option value="math">高等数学</option>
+                    <option value="physics">大学物理</option>
+                    <option value="cs">计算机基础</option>
+                    <option value="english">大学英语</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paper-class">班级</label>
+                <select id="paper-class">
+                    <option value="">请选择班级</option>
+                    <option value="class-1">计算机科学2021-1班</option>
+                    <option value="class-2">计算机科学2021-2班</option>
+                    <option value="class-3">计算机科学2022-1班</option>
+                    <option value="all">所有班级</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paper-time">考试时长（分钟）</label>
+                <input type="number" id="paper-time" min="10" placeholder="请输入考试时长">
+            </div>
+            <div class="form-group">
+                <label for="paper-date">考试日期</label>
+                <input type="date" id="paper-date">
+            </div>
+            <div class="form-group">
+                <label for="paper-desc">试卷说明</label>
+                <textarea id="paper-desc" rows="4" placeholder="请输入试卷说明和注意事项"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="paper-file">上传试卷文件（PDF）</label>
+                <input type="file" id="paper-file" accept=".pdf">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn">取消</button>
+                <button type="submit" class="submit-btn">创建试卷</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 导入学生模态框 -->
+<div id="importStudentsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>导入学生名单</h2>
+        <form id="importStudentsForm">
+            <div class="form-group">
+                <label for="student-file">上传学生名单（Excel/CSV）</label>
+                <input type="file" id="student-file" accept=".xlsx,.xls,.csv">
+            </div>
+            <div class="import-template">
+                <p>请按照模板格式导入学生名单</p>
+                <button type="button" class="template-btn">下载模板</button>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn">取消</button>
+                <button type="submit" class="submit-btn">导入学生</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 修改密码模态框 -->
+<div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>修改密码</h2>
+        <form id="changePasswordForm">
+            <div class="form-group">
+                <label for="current-password">当前密码</label>
+                <input type="password" id="current-password" placeholder="请输入当前密码">
+            </div>
+            <div class="form-group">
+                <label for="new-password">新密码</label>
+                <input type="password" id="new-password" placeholder="请输入新密码">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">确认新密码</label>
+                <input type="password" id="confirm-password" placeholder="请再次输入新密码">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn">取消</button>
+                <button type="submit" class="submit-btn">修改密码</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script-teacher1.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0;url=/register"> 
+    <title>正在跳转...</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #3494e6, #ec6ead);
+            color: white;
+            text-align: center;
+        }
+        .loader {
+            border: 5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 5px solid white;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>正在进入注册页面...</h2>
+        <div class="loader"></div>
+        <p>如果页面没有自动跳转，请<a href="/register" style="color: white; text-decoration: underline;">点击这里</a></p>
+    </div>
+    
+    <script>
+        // 确保跳转立即执行
+        window.onload = function() {
+            window.location.href = '/register';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* 在线考试样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .exam-container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .exam-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .exam-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .exam-metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .exam-metadata .meta-item {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .exam-metadata .meta-item i {
+            margin-right: 5px;
+            color: #3498db;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea.form-control {
+            min-height: 300px;
+            resize: vertical;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-primary {
+            background-color: #3498db;
+        }
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .alert-danger {
+            background-color: #fde2e2;
+            color: #e74c3c;
+            border: 1px solid #fadbd8;
+        }
+        .exam-description {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        {{ if .error }}
+        <div class="alert alert-danger">
+            {{ .error }}
+        </div>
+        {{ end }}
+        
+        <div class="exam-header">
+            <h1 class="exam-title">{{ .exam.Title }}</h1>
+            <div class="exam-metadata">
+                <span class="meta-item"><i class="fas fa-book"></i> {{ .exam.Course }}</span>
+                <span class="meta-item"><i class="fas fa-user"></i> 教师: {{ .exam.Creator.Name }}</span>
+                <span class="meta-item"><i class="fas fa-clock"></i> 发布时间: {{ .exam.CreatedAt.Format "2006-01-02" }}</span>
+            </div>
+        </div>
+        
+        {{ if .exam.Description }}
+        <div class="exam-description">
+            {{ .exam.Description }}
+        </div>
+        {{ end }}
+        
+        <form action="/student/submit-exam/{{ .exam.ID }}" method="POST">
+            <input type="hidden" name="username" value="{{ .user.Username }}">
+            <input type="hidden" name="examDataId" value="{{ .examDataId }}">
+            
+            <div class="form-group">
+                <label for="answer">您的答案</label>
+                <textarea name="answer" id="answer" class="form-control" placeholder="请在此处输入您的答案..." required></textarea>
+            </div>
+            
+            <div class="actions">
+                <a href="/dashboard-student?username={{ .user.Username }}" class="btn btn-secondary">返回</a>
+                <button type="submit" class="btn btn-primary">提交答案</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html> 

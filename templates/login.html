@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }} - 试卷审批管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #3494e6, #ec6ead);
+        }
+
+        .login-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 400px;
+            max-width: 90%;
+            padding: 30px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .login-header p {
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #3494e6;
+            outline: none;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3494e6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: #3494e6;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: white;
+            background-color: #f44336;
+            display: none;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-icon input {
+            padding-left: 40px;
+        }
+
+        /* 角色选择样式 */
+        .role-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+
+        .role-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .role-option.active {
+            background-color: #3494e6;
+            color: white;
+            border-color: #3494e6;
+        }
+
+        .role-option i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        /* 加载中动画 */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>试卷审批管理系统</h2>
+            <p>请选择身份并输入账号密码登录</p>
+        </div>
+
+        <div id="login-alert" class="alert"></div>
+
+        <form id="login-form">
+            <!-- 角色选择 -->
+            <div class="form-group">
+                <label>选择身份</label>
+                <div class="role-options">
+                    <div class="role-option" data-role="student" onclick="selectRole('student', this)">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>学生</span>
+                    </div>
+                    <div class="role-option" data-role="teacher" onclick="selectRole('teacher', this)">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>教师</span>
+                    </div>
+                    <div class="role-option" data-role="admin" onclick="selectRole('admin', this)">
+                        <i class="fas fa-user-shield"></i>
+                        <span>管理员</span>
+                    </div>
+                </div>
+                <input type="hidden" id="role" name="role" value="student">
+            </div>
+
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <div class="input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" id="login-btn" class="btn">登录系统</button>
+            </div>
+
+            <div class="form-footer">
+                <p>还没有账号？
+                    <a href="javascript:void(0)" onclick="window.location.href='/new-account'"
+                        style="font-weight: bold; color: #3494e6; cursor: pointer; text-decoration: underline;">立即注册</a>
+                </p>
+            </div>
+        </form>
+
+        <!-- 添加独立的明显注册按钮 -->
+        <div style="margin-top: 30px; text-align: center;">
+            <button onclick="directToRegister()" class="btn"
+                style="background-color: #28a745; display: inline-block; width: auto; padding: 10px 30px;">
+                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>创建新账号
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 直接跳转到注册页面的函数
+        function directToRegister() {
+            console.log('正在跳转到注册页面...');
+            window.location.href = '/new-account';
+        }
+
+        // 选择角色
+        function selectRole(role, element) {
+            // 更新隐藏字段
+            document.getElementById('role').value = role;
+
+            // 更新UI
+            const roleOptions = document.querySelectorAll('.role-option');
+            roleOptions.forEach(option => {
+                option.classList.remove('active');
+            });
+
+            element.classList.add('active');
+        }
+
+        // 初始化界面
+        document.addEventListener('DOMContentLoaded', function () {
+            // 设置默认选中角色
+            selectRole('student', document.querySelector('.role-option[data-role="student"]'));
+
+            // 添加表单提交事件
+            document.getElementById('login-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // 获取表单数据
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value;
+
+                console.log('尝试登录:', { username, role });
+
+                // 显示加载状态
+                showLoading('login-btn');
+
+                // 发送登录请求
+                fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password, role })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 隐藏加载状态
+                        hideLoading('login-btn', '登录系统');
+
+                        if (data.user) {
+                            // 登录成功
+                            showAlert('登录成功，正在跳转...', 'success');
+
+                            // 同时保存到sessionStorage和localStorage
+                            const userData = JSON.stringify(data.user);
+                            
+                            // 为了兼容两种存储机制
+                            sessionStorage.setItem('currentUser', userData);
+                            sessionStorage.setItem('isLoggedIn', 'true');
+                            sessionStorage.setItem('username', data.user.username);
+                            
+                            // 同时设置localStorage (用于脚本兼容)
+                            localStorage.setItem('currentUser', userData);
+                            localStorage.setItem('token', data.user.username); // 用username作为简单token
+                            
+                            // 根据角色跳转到相应页面，直接在URL中添加用户名参数
+                            const destination = role === 'student' 
+                                ? '/dashboard-student' 
+                                : role === 'teacher' 
+                                    ? '/dashboard-teacher' 
+                                    : '/dashboard-admin';
+                            
+                            window.location.href = destination + '?username=' + encodeURIComponent(data.user.username);
+                        } else {
+                            // 登录失败
+                            showAlert(data.error || '登录失败，请检查用户名和密码');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('登录错误:', error);
+                        hideLoading('login-btn', '登录系统');
+                        showAlert('登录失败，请检查网络连接');
+                    });
+            });
+        });
+
+        // 显示提示信息
+        function showAlert(message, type = 'danger') {
+            const alertElement = document.getElementById('login-alert');
+            alertElement.textContent = message;
+            alertElement.style.display = 'block';
+
+            if (type === 'danger') {
+                alertElement.style.backgroundColor = '#f44336';
+            } else if (type === 'success') {
+                alertElement.style.backgroundColor = '#4CAF50';
+            }
+        }
+
+        // 显示加载状态
+        function showLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<span class="spinner"></span> 处理中...';
+            }
+        }
+
+        // 隐藏加载状态
+        function hideLoading(buttonId, buttonText) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.disabled = false;
+                button.textContent = buttonText || '登录系统';
+            }
+        }
+    </script>
+</body>
+
+</html>

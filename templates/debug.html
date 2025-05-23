@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 40px;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #3494e6;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #3494e6;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>页面跳转调试</h1>
+        <p>测试不同跳转方式：</p>
+        
+        <button class="btn" onclick="location.href='/login'">打开登录页 (location.href)</button>
+        <button class="btn" onclick="testLink('/register')">打开注册页 (普通链接点击)</button>
+        <button class="btn" onclick="window.location.replace('/login')">重定向登录页 (location.replace)</button>
+        <a href="/register" class="btn">普通链接打开注册页</a>
+        
+        <div id="result"></div>
+    </div>
+    
+    <script>
+        function testLink(url) {
+            // 创建一个链接并点击
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_self';
+            a.click();
+            
+            document.getElementById('result').textContent = `点击链接跳转到: ${url}`;
+        }
+        
+        // 记录当前页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('调试页面已加载完成');
+        });
+    </script>
+</body>
+</html> 

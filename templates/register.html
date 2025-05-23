@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ .title }} - 试卷审批管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css?v={{ .timestamp }}">
+    <style>
+        /* 改进注册表单样式 */
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #3494e6, #ec6ead);
+            min-height: 100vh;
+        }
+        .auth-card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-title {
+            color: #333;
+            font-size: 24px;
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3494e6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-danger {
+            background-color: #ffe1e1;
+            color: #d32f2f;
+            border: 1px solid #ef9a9a;
+        }
+        .alert-success {
+            background-color: #e0f7e0;
+            color: #43a047;
+            border: 1px solid #a5d6a7;
+        }
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border-width: 3px;
+            display: inline-block;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+            margin-right: 5px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 页面加载中的样式 */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            flex-direction: column;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .auth-container {
+            padding: 50px 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-3 {
+            margin-top: 15px;
+        }
+        .footer {
+            background-color: rgba(0,0,0,0.1);
+            padding: 20px 0;
+            color: white;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .footer-link {
+            margin-left: 20px;
+        }
+        .footer-link a {
+            color: white;
+            text-decoration: none;
+        }
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+            }
+            .footer-links {
+                margin-top: 10px;
+            }
+            .footer-link {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载中遮罩 -->
+    <div id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>页面加载中，请稍候...</p>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2 class="auth-title">用户注册</h2>
+                        <p>请填写以下信息完成注册</p>
+                    </div>
+                    <div id="register-alert" class="alert" style="display: none;"></div>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="username" class="form-label">用户名</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-label">姓名</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">密码</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password" class="form-label">确认密码</label>
+                            <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">角色</label>
+                            <div>
+                                <input type="radio" id="role-student" name="role" value="student" checked>
+                                <label for="role-student">学生</label>
+                                &nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="role-teacher" name="role" value="teacher">
+                                <label for="role-teacher">教师</label>
+                                &nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="role-admin" name="role" value="admin">
+                                <label for="role-admin">管理员</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="register-btn" class="btn-primary">注册</button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p>已有账号？<a href="javascript:void(0)" onclick="window.location.href='/login'" style="color: #3494e6; text-decoration: none;">立即登录</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 页面加载处理
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM已加载完成');
+            setTimeout(function() {
+                document.getElementById('loading-overlay').style.display = 'none';
+                console.log('注册页面完全加载');
+            }, 500);
+        });
+
+        // 确保页面即使在资源加载完成前也能移除加载遮罩
+        window.addEventListener('load', function() {
+            document.getElementById('loading-overlay').style.display = 'none';
+            console.log("页面资源已完全加载");
+        });
+
+        // 5秒后强制移除加载遮罩，避免卡住
+        setTimeout(function() {
+            document.getElementById('loading-overlay').style.display = 'none';
+            console.log("强制移除加载遮罩");
+        }, 5000);
+
+        // 显示提示信息函数
+        function showAlert(alertId, message, type = 'info') {
+            const alertElement = document.getElementById(alertId);
+            if (alertElement) {
+                alertElement.className = `alert alert-${type}`;
+                alertElement.textContent = message;
+                alertElement.style.display = 'block';
+                
+                // 滚动到提示信息位置
+                alertElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // 5秒后自动隐藏
+                setTimeout(() => {
+                    alertElement.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // 显示加载状态
+        function showLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<span class="spinner"></span> 处理中...';
+                console.log('按钮状态：已禁用，显示加载中');
+            }
+        }
+        
+        // 隐藏加载状态
+        function hideLoading(buttonId, buttonText) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.disabled = false;
+                button.textContent = buttonText;
+                console.log('按钮状态：已启用，显示文本：', buttonText);
+            }
+        }
+        
+        // 注册函数
+        async function registerUser(username, password, name, role) {
+            showLoading('register-btn');
+            console.log('注册信息:', { username, name, role });
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password, name, role })
+                });
+                
+                const data = await response.json();
+                console.log('响应数据:', data);
+                
+                hideLoading('register-btn', '注册');
+                
+                if (response.ok) {
+                    // 注册成功，显示成功消息并跳转到登录页面
+                    showAlert('register-alert', '注册成功，即将跳转到登录页面', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    // 注册失败，显示错误消息
+                    showAlert('register-alert', data.error || '注册失败', 'danger');
+                }
+            } catch (error) {
+                console.error('注册过程中发生错误:', error);
+                hideLoading('register-btn', '注册');
+                showAlert('register-alert', '注册失败，请检查网络连接', 'danger');
+            }
+        }
+
+        // 注册表单处理
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const name = document.getElementById('name').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+            
+            if (password !== confirmPassword) {
+                showAlert('register-alert', '两次输入的密码不一致', 'danger');
+                return false;
+            }
+            
+            // 调用注册函数
+            registerUser(username, password, name, role);
+        });
+    </script>
+</body>
+</html> 

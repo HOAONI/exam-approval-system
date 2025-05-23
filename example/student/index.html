@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷审批管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>试卷审批系统</h2>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </li>
+            <li class="nav-item" data-page="my-papers">
+                <i class="fas fa-file-alt"></i>
+                <span>我的试卷</span>
+            </li>
+            <li class="nav-item" data-page="approval-progress">
+                <i class="fas fa-tasks"></i>
+                <span>审批进度</span>
+            </li>
+            <li class="nav-item" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>个人中心</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <div class="header">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索...">
+            </div>
+            <div class="user-info">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user">
+                    <img src="https://via.placeholder.com/36" alt="用户头像">
+                    <span>张同学</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容页面区域 -->
+        <div class="content">
+            <!-- 首页 -->
+            <div class="page active" id="home">
+                <div class="stats-cards">
+                    <div class="card">
+                        <div class="card-icon blue">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>试卷总数</h3>
+                            <p>12份</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>已通过审批</h3>
+                            <p>8份</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>待审批</h3>
+                            <p>3份</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon red">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3>未通过</h3>
+                            <p>1份</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-papers">
+                    <h2>最近的试卷</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>试卷名称</th>
+                                <th>科目</th>
+                                <th>提交时间</th>
+                                <th>分数</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>期中考试试卷</td>
+                                <td>数学</td>
+                                <td>2025-04-15</td>
+                                <td>92</td>
+                                <td><span class="status approved">已通过</span></td>
+                            </tr>
+                            <tr>
+                                <td>月度测验</td>
+                                <td>物理</td>
+                                <td>2025-04-22</td>
+                                <td>85</td>
+                                <td><span class="status pending">审批中</span></td>
+                            </tr>
+                            <tr>
+                                <td>小组测验</td>
+                                <td>英语</td>
+                                <td>2025-04-25</td>
+                                <td>88</td>
+                                <td><span class="status pending">审批中</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 我的试卷 -->
+            <div class="page" id="my-papers">
+                <div class="page-header">
+                    <h1>我的试卷</h1>
+                    <button class="upload-btn" id="uploadPaperBtn">
+                        <i class="fas fa-upload"></i> 上传试卷
+                    </button>
+                </div>
+                <div class="papers-filter">
+                    <div class="filter-group">
+                        <label for="subject-filter">科目：</label>
+                        <select id="subject-filter">
+                            <option value="all">全部</option>
+                            <option value="math">数学</option>
+                            <option value="physics">物理</option>
+                            <option value="english">英语</option>
+                            <option value="chemistry">化学</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="status-filter">状态：</label>
+                        <select id="status-filter">
+                            <option value="all">全部</option>
+                            <option value="approved">已通过</option>
+                            <option value="pending">审批中</option>
+                            <option value="rejected">未通过</option>
+                        </select>
+                    </div>
+                    <div class="search-paper">
+                        <input type="text" placeholder="搜索试卷名称...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="papers-list">
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>期末考试试卷</h3>
+                            <div class="paper-meta">
+                                <span><i class="fas fa-book"></i> 数学</span>
+                                <span><i class="fas fa-calendar"></i> 2025-03-15</span>
+                                <span><i class="fas fa-star"></i> 95分</span>
+                            </div>
+                            <div class="paper-status approved">已通过</div>
+                        </div>
+                        <div class="paper-actions">
+                            <button class="view-btn"><i class="fas fa-eye"></i> 查看</button>
+                            <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>月考试卷</h3>
+                            <div class="paper-meta">
+                                <span><i class="fas fa-book"></i> 物理</span>
+                                <span><i class="fas fa-calendar"></i> 2025-04-05</span>
+                                <span><i class="fas fa-star"></i> 88分</span>
+                            </div>
+                            <div class="paper-status approved">已通过</div>
+                        </div>
+                        <div class="paper-actions">
+                            <button class="view-btn"><i class="fas fa-eye"></i> 查看</button>
+                            <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>期中测验</h3>
+                            <div class="paper-meta">
+                                <span><i class="fas fa-book"></i> 英语</span>
+                                <span><i class="fas fa-calendar"></i> 2025-04-20</span>
+                                <span><i class="fas fa-star"></i> 90分</span>
+                            </div>
+                            <div class="paper-status pending">审批中</div>
+                        </div>
+                        <div class="paper-actions">
+                            <button class="view-btn"><i class="fas fa-eye"></i> 查看</button>
+                            <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-card">
+                        <div class="paper-info">
+                            <h3>单元测试</h3>
+                            <div class="paper-meta">
+                                <span><i class="fas fa-book"></i> 化学</span>
+                                <span><i class="fas fa-calendar"></i> 2025-04-22</span>
+                                <span><i class="fas fa-star"></i> 78分</span>
+                            </div>
+                            <div class="paper-status rejected">未通过</div>
+                        </div>
+                        <div class="paper-actions">
+                            <button class="view-btn"><i class="fas fa-eye"></i> 查看</button>
+                            <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 上传试卷模态框 -->
+                <div class="modal" id="uploadPaperModal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>上传新试卷</h2>
+                        <form id="uploadPaperForm">
+                            <div class="form-group">
+                                <label for="paper-name">试卷名称</label>
+                                <input type="text" id="paper-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paper-subject">科目</label>
+                                <select id="paper-subject" required>
+                                    <option value="">请选择科目</option>
+                                    <option value="math">数学</option>
+                                    <option value="physics">物理</option>
+                                    <option value="english">英语</option>
+                                    <option value="chemistry">化学</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="paper-score">分数</label>
+                                <input type="number" id="paper-score" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paper-file">上传文件</label>
+                                <input type="file" id="paper-file" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paper-notes">备注</label>
+                                <textarea id="paper-notes" rows="3"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="submit-btn">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 审批进度 -->
+            <div class="page" id="approval-progress">
+                <div class="page-header">
+                    <h1>审批进度</h1>
+                </div>
+                <div class="progress-filter">
+                    <div class="filter-group">
+                        <label for="progress-status-filter">状态：</label>
+                        <select id="progress-status-filter">
+                            <option value="all">全部</option>
+                            <option value="pending">审批中</option>
+                            <option value="approved">已通过</option>
+                            <option value="rejected">未通过</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="approval-list">
+                    <div class="approval-card">
+                        <div class="approval-header">
+                            <h3>期中测验 - 英语</h3>
+                            <div class="approval-date">提交时间: 2025-04-20</div>
+                        </div>
+                        <div class="approval-progress">
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>提交审批</h4>
+                                    <p>您的试卷已成功提交</p>
+                                    <div class="progress-time">2025-04-20 15:30</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>班主任审批</h4>
+                                    <p>已通过班主任审核</p>
+                                    <div class="progress-time">2025-04-21 09:15</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item active">
+                                <div class="progress-icon">
+                                    <i class="fas fa-sync-alt fa-spin"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>教务处审批</h4>
+                                    <p>正在审核中...</p>
+                                    <div class="progress-time">等待中</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-icon">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>审批完成</h4>
+                                    <p>等待最终审批结果</p>
+                                    <div class="progress-time">等待中</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="approval-card">
+                        <div class="approval-header">
+                            <h3>期末考试试卷 - 数学</h3>
+                            <div class="approval-date">提交时间: 2025-03-15</div>
+                        </div>
+                        <div class="approval-progress">
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>提交审批</h4>
+                                    <p>您的试卷已成功提交</p>
+                                    <div class="progress-time">2025-03-15 10:20</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>班主任审批</h4>
+                                    <p>已通过班主任审核</p>
+                                    <div class="progress-time">2025-03-16 14:35</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>教务处审批</h4>
+                                    <p>已通过教务处审核</p>
+                                    <div class="progress-time">2025-03-18 11:40</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>审批完成</h4>
+                                    <p>恭喜，您的试卷已通过所有审批！</p>
+                                    <div class="progress-time">2025-03-18 16:20</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="approval-card">
+                        <div class="approval-header">
+                            <h3>单元测试 - 化学</h3>
+                            <div class="approval-date">提交时间: 2025-04-22</div>
+                        </div>
+                        <div class="approval-progress">
+                            <div class="progress-item completed">
+                                <div class="progress-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>提交审批</h4>
+                                    <p>您的试卷已成功提交</p>
+                                    <div class="progress-time">2025-04-22 16:45</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item rejected">
+                                <div class="progress-icon">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>班主任审批</h4>
+                                    <p>未通过班主任审核：分数偏低，请重新考虑</p>
+                                    <div class="progress-time">2025-04-23 13:10</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item disabled">
+                                <div class="progress-icon">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>教务处审批</h4>
+                                    <p>审批终止</p>
+                                    <div class="progress-time">-</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item disabled">
+                                <div class="progress-icon">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="progress-content">
+                                    <h4>审批完成</h4>
+                                    <p>审批终止</p>
+                                    <div class="progress-time">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 个人中心 -->
+            <div class="page" id="profile">
+                <div class="page-header">
+                    <h1>个人中心</h1>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar">
+                            <img src="https://via.placeholder.com/150" alt="用户头像">
+                            <button class="change-avatar-btn">更换头像</button>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">试卷总数</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">已通过</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">89</div>
+                                <div class="stat-label">平均分</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-main">
+                        <div class="profile-section">
+                            <h2>基本信息</h2>
+                            <form class="profile-form">
+                                <div class="form-group">
+                                    <label for="fullname">姓名</label>
+                                    <input type="text" id="fullname" value="张三" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="student-id">学号</label>
+                                    <input type="text" id="student-id" value="2021001234" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="class">班级</label>
+                                    <input type="text" id="class" value="2021级3班" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="department">院系</label>
+                                    <input type="text" id="department" value="计算机科学与技术学院" readonly>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="profile-section">
+                            <h2>联系方式</h2>
+                            <form class="profile-form">
+                                <div class="form-group">
+                                    <label for="email">邮箱</label>
+                                    <input type="email" id="email" value="zhangsan@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">手机号</label>
+                                    <input type="tel" id="phone" value="138****5678">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="save-btn">保存修改</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="profile-section">
+                            <h2>账号安全</h2>
+                            <div class="security-options">
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>修改密码</h3>
+                                        <p>定期更改密码可以提高账号安全性</p>
+                                    </div>
+                                    <button class="change-btn" id="changePasswordBtn">修改</button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>绑定手机</h3>
+                                        <p>已绑定：138****5678</p>
+                                    </div>
+                                    <button class="change-btn">更换</button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h3>登录记录</h3>
+                                        <p>查看您的账号登录历史</p>
+                                    </div>
+                                    <button class="view-btn">查看</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 修改密码模态框 -->
+                <div class="modal" id="changePasswordModal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>修改密码</h2>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label for="current-password">当前密码</label>
+                                <input type="password" id="current-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">新密码</label>
+                                <input type="password" id="new-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">确认新密码</label>
+                                <input type="password" id="confirm-password" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn">取消</button>
+                                <button type="submit" class="submit-btn">确认修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script1.js"></script>
+</body>
+</html>
